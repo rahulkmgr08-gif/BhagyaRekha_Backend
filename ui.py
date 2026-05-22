@@ -145,11 +145,4 @@ elif st.session_state.current_page == "chat":
         user_message = st.text_input("अपना सवाल यहाँ टाइप करें...", placeholder="जैसे: मेरी नौकरी कब लगेगी?")
         send_button = st.form_submit_button("पूंछें 🚀")
         
-    if send_button and user_message:
-        # यूज़र का मैसेज स्क्रीन पर जोड़ना
-        st.session_state.chat_history.append({"sender": "user", "message": user_message})
-        
-        # (अस्थायी तौर पर ज्योतिषी का एक ऑटो-जवाब जोड़ रहे हैं, शाम को इसमें असली AI जोड़ेंगे)
-        astro_reply = "आपकी कुंडली में सूर्य मजबूत स्थिति में आ रहा है। थोड़ा धैर्य रखें, जल्द ही शुभ समाचार मिलेगा।"
-        st.session_state.chat_history.append({"sender": "astro", "message": astro_reply})
-        st.rerun()
+ 

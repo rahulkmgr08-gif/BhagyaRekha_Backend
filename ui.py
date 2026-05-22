@@ -160,6 +160,15 @@ elif st.session_state.current_page == "chat":
         with st.spinner("आचार्य जी सोच रहे हैं... 🔮"):
             try:
                 response = requests.post(CHAT_API_URL, json=payload)
+                with st.spinner("आचार्य जी सोच रहे हैं... 🔮"):
+            try:
+                response = requests.post(CHAT_API_URL, json=payload)
+                
+                # 🕵️‍♂️ यह जासूसी कोड यहाँ जोड़ें (ताकि स्क्रीन पर सच दिख सके)
+                st.write("Debug - Status Code:", response.status_code)
+                st.write("Debug - Full Response:", response.text)
+                
+                if response.status_code == 200:
                 if response.status_code == 200:
                     astro_reply = response.json().get("astro_reply", "कृपा करके अपना सवाल दोबारा पूछें।")
                     st.session_state.chat_history.append({"sender": "astro", "message": astro_reply})

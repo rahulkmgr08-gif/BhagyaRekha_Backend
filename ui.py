@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-# पेज की शुरुआती सेटिंग (मोबाइल जैसा लुक)
+# पेज की शुरुआती... सेटिंग (मोबाइल जैसा लुक)
 st.set_page_config(page_title="BhagyaRekha - App", page_icon="✨", layout="centered")
 
 # स्टाइलिंग (एस्ट्रोलॉजी थीम)
@@ -22,7 +22,7 @@ if 'logged_in' not in st.session_state:
 if 'user_data' not in st.session_state:
     st.session_state.user_data = {}
 if 'current_page' not in st.session_state:
-    st.session_state.current_page = "signup" # (signup, home, chat)
+    st.session_state.current_page = "signup" 
 if 'chat_history' not in st.session_state:
     st.session_state.chat_history = [
         {"sender": "astro", "message": "प्रणाम! मैं आचार्य आनंद। आज आपके सितारे क्या कहते हैं? अपना सवाल पूछें। 🙏"}
@@ -66,12 +66,11 @@ if st.session_state.current_page == "signup" and not st.session_state.logged_in:
                 except Exception as e:
                     st.error(f"🔌 कनेक्ट नहीं हो पाए: {str(e)}")
 
-# --- स्क्रीन 2: होम स्क्रीन (लॉगिन के बाद) ---
+# --- SCREEN 2: HOME SCREEN ---
 elif st.session_state.current_page == "home":
     user = st.session_state.user_data
     user_name = user.get('name', 'User')
     
-    # टॉप बार: नाम और वॉलेट
     col1, col2 = st.columns([2, 1])
     with col1:
         st.markdown(f"### 🪐 नमस्ते, {user_name} जी!")
@@ -80,7 +79,6 @@ elif st.session_state.current_page == "home":
     
     st.write("---")
     
-    # आज का राशिफल
     st.subheader("📆 आपका आज का राशिफल")
     HOROSCOPE_URL = "https://bhagyarekha-backend.onrender.com/get_horoscope/2"
     
@@ -100,7 +98,6 @@ elif st.session_state.current_page == "home":
             
     st.write("---")
     
-    # मुख्य सेवाएं
     st.subheader("🔮 हमारी मुख्य सेवाएं")
     c1, c2 = st.columns(2)
     with c1:
@@ -115,11 +112,10 @@ elif st.session_state.current_page == "home":
         st.session_state.current_page = "signup"
         st.rerun()
 
-# --- स्क्रीन 3: लाइव चैट स्क्रीन ---
+# --- SCREEN 3: LIVE CHAT SCREEN (NO FORM NO BUG) ---
 elif st.session_state.current_page == "chat":
     user = st.session_state.user_data
     
-    # चैट स्क्रीन का हेडर
     col1, col2 = st.columns([2, 1])
     with col1:
         if st.button("⬅️ होम पेज पर जाएं"):
@@ -133,23 +129,22 @@ elif st.session_state.current_page == "chat":
     
     st.write("---")
     
-    # पुरानी चैट हिस्ट्री दिखाना
+    # चैट हिस्ट्री दिखाना
     for chat in st.session_state.chat_history:
         if chat["sender"] == "user":
             st.markdown(f"<div class='chat-bubble-user'><b>आप:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
         else:
             st.markdown(f"<div class='chat-bubble-astro'><b>आचार्य जी:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
             
-    # नया मैसेज इनपुट करने का बॉक्स
-    with st.form("chat_input_form", clear_on_submit=False):
-        user_message = st.text_input("अपना सवाल यहाँ टाइप करें...", placeholder="जैसे: मेरी नौकरी कब लगेगी?")
-        send_button = st.form_submit_button("पूंछें 🚀")
+    # 🛠️ यहाँ से st.form को पूरी तरह हटा दिया गया है ताकि इनपुट कभी न फँसे
+    user_message = st.text_input("अपना सवाल यहाँ टाइप करें...", placeholder="जैसे: मेरी नौकरी कब लगेगी?", key="user_input_box")
+    send_button = st.button("पूंछें 🚀", type="primary")
         
     if send_button and user_message:
         # 1. यूज़र का मैसेज स्क्रीन पर जोड़ना
         st.session_state.chat_history.append({"sender": "user", "message": user_message})
         
-        # 2. Render के लाइव AI एंडपॉइंट से कनेक्ट करना
+        # 2. Render लाइव AI एंडपॉइंट कनेक्शन
         CHAT_API_URL = "https://bhagyarekha-backend.onrender.com/chat_with_astrologer"
         payload = {
             "user_message": user_message,
@@ -159,16 +154,11 @@ elif st.session_state.current_page == "chat":
         with st.spinner("आचार्य जी सोच रहे हैं... 🔮"):
             try:
                 response = requests.post(CHAT_API_URL, json=payload)
-                
-                # 🕵️‍♂️ जासूसी डीबग कोड
-                st.write("Debug - Status Code:", response.status_code)
-                st.write("Debug - Full Response:", response.text)
-                
                 if response.status_code == 200:
                     astro_reply = response.json().get("astro_reply", "कृपा करके अपना सवाल दोबारा पूछें।")
                     st.session_state.chat_history.append({"sender": "astro", "message": astro_reply})
                 else:
-                    st.error(f"⚠️ सर्वर ने जवाब नहीं दिया। Error Code: {response.status_code}")
+                    st.error(f"⚠️ सर्वर एरर। स्टेटस कोड: {response.status_code}")
             except Exception as e:
                 st.error(f"🔌 Connection Error: {str(e)}")
                 

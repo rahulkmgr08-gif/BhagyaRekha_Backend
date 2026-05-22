@@ -112,7 +112,7 @@ elif st.session_state.current_page == "home":
         st.session_state.current_page = "signup"
         st.rerun()
 
-# --- SCREEN 3: LIVE CHAT SCREEN (ST.CHAT_INPUT METHOD) ---
+# --- SCREEN 3: LIVE CHAT SCREEN ---
 elif st.session_state.current_page == "chat":
     user = st.session_state.user_data
     
@@ -129,14 +129,16 @@ elif st.session_state.current_page == "chat":
     
     st.write("---")
     
-    # चैट हिस्ट्री दिखाना
-    for chat in st.session_state.chat_history:
-        if chat["sender"] == "user":
-            st.markdown(f"<div class='chat-bubble-user'><b>आप:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
-        else:
-            st.markdown(f"<div class='chat-bubble-astro'><b>आचार्य जी:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
+    # चैट कंटेनर (ताकि मैसेज हिस्ट्री सही से दिखे)
+    chat_placeholder = st.container()
+    with chat_placeholder:
+        for chat in st.session_state.chat_history:
+            if chat["sender"] == "user":
+                st.markdown(f"<div class='chat-bubble-user'><b>आप:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
+            else:
+                st.markdown(f"<div class='chat-bubble-astro'><b>आचार्य जी:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
             
-    # 🌟 यहाँ हमने असली प्रोफेशनल st.chat_input लगा दिया है जो कभी नहीं अटकता!
+    # चैट इनपुट बॉक्स
     user_message = st.chat_input("अपना सवाल यहाँ लिखें (जैसे: मेरी शादी कब होगी?)...")
         
     if user_message:
@@ -161,4 +163,5 @@ elif st.session_state.current_page == "chat":
             except Exception as e:
                 st.error(f"🔌 Connection Error: {str(e)}")
                 
+        # यहाँ से st.rerun() को हटाकर सीधे रिफ्रेश लॉजिक सेट किया है
         st.rerun()

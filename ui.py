@@ -100,7 +100,7 @@ elif st.session_state.current_page == "home":
             
     st.write("---")
     
-    # मुख्य सेवाएं (अब बटन काम करेंगे)
+    # मुख्य सेवाएं
     st.subheader("🔮 हमारी मुख्य सेवाएं")
     c1, c2 = st.columns(2)
     with c1:
@@ -141,11 +141,16 @@ elif st.session_state.current_page == "chat":
             st.markdown(f"<div class='chat-bubble-astro'><b>आचार्य जी:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
             
     # नया मैसेज इनपुट करने का बॉक्स
- if send_button and user_message:
+    with st.form("chat_input_form", clear_on_submit=True):
+        user_message = st.text_input("अपना सवाल यहाँ टाइप करें...", placeholder="जैसे: मेरी नौकरी कब लगेगी?")
+        send_button = st.form_submit_button("पूंछें 🚀")
+        
+    # ✨ यहाँ असली Render API और Google Gemini AI काम करेगा
+    if send_button and user_message:
         # 1. यूज़र का मैसेज स्क्रीन पर जोड़ना
         st.session_state.chat_history.append({"sender": "user", "message": user_message})
         
-        # 2. Render के नए AI endpoint से कनेक्ट करना
+        # 2. Render के लाइव AI एंडपॉइंट से कनेक्ट करना
         CHAT_API_URL = "https://bhagyarekha-backend.onrender.com/chat_with_astrologer"
         payload = {
             "user_message": user_message,

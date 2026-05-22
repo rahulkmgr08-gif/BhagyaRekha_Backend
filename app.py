@@ -193,4 +193,4 @@ def get_zodiac_and_prediction(birth_date_str: str):
         pred = "आज का दिन आपके लिए नई ऊर्जा लेकर आएगा। व्यापार में लाभ के योग हैं।"
     elif (month == 4 and day >= 20) or (month == 5 and day <= 20):
         sign = "Vrishabha (Taurus)"
-        pred = "आर्थिक स्थिति मजबूत होगी। परिवार के साथ अच्छा समय बीतेगा
+        pred = "आर्थिक स्थिति मजबूत होगी। परिवार के साथ अच्छा समय बीतेगा"

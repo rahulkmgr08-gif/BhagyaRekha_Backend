@@ -145,7 +145,6 @@ elif st.session_state.current_page == "chat":
         user_message = st.text_input("अपना सवाल यहाँ टाइप करें...", placeholder="जैसे: मेरी नौकरी कब लगेगी?")
         send_button = st.form_submit_button("पूंछें 🚀")
         
-    # ✨ यहाँ असली Render API और Google Gemini AI काम करेगा
     if send_button and user_message:
         # 1. यूज़र का मैसेज स्क्रीन पर जोड़ना
         st.session_state.chat_history.append({"sender": "user", "message": user_message})
@@ -160,20 +159,16 @@ elif st.session_state.current_page == "chat":
         with st.spinner("आचार्य जी सोच रहे हैं... 🔮"):
             try:
                 response = requests.post(CHAT_API_URL, json=payload)
-                with st.spinner("आचार्य जी सोच रहे हैं... 🔮"):
-            try:
-                response = requests.post(CHAT_API_URL, json=payload)
                 
-                # 🕵️‍♂️ यह जासूसी कोड यहाँ जोड़ें (ताकि स्क्रीन पर सच दिख सके)
+                # 🕵️‍♂️ जासूसी डीबग कोड
                 st.write("Debug - Status Code:", response.status_code)
                 st.write("Debug - Full Response:", response.text)
                 
                 if response.status_code == 200:
-                if response.status_code == 200:
                     astro_reply = response.json().get("astro_reply", "कृपा करके अपना सवाल दोबारा पूछें।")
                     st.session_state.chat_history.append({"sender": "astro", "message": astro_reply})
                 else:
-                    st.error("⚠️ आचार्य जी अभी ध्यान में हैं, थोड़ी देर बाद प्रयास करें।")
+                    st.error(f"⚠️ सर्वर ने जवाब नहीं दिया। Error Code: {response.status_code}")
             except Exception as e:
                 st.error(f"🔌 Connection Error: {str(e)}")
                 

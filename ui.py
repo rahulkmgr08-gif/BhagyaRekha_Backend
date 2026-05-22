@@ -141,7 +141,7 @@ elif st.session_state.current_page == "chat":
             st.markdown(f"<div class='chat-bubble-astro'><b>आचार्य जी:</b><br>{chat['message']}</div>", unsafe_allow_html=True)
             
     # नया मैसेज इनपुट करने का बॉक्स
-    with st.form("chat_input_form", clear_on_submit=True):
+    with st.form("chat_input_form", clear_on_submit=False):
         user_message = st.text_input("अपना सवाल यहाँ टाइप करें...", placeholder="जैसे: मेरी नौकरी कब लगेगी?")
         send_button = st.form_submit_button("पूंछें 🚀")
         
